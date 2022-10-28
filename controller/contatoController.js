@@ -3,7 +3,9 @@ const {ObjectId} =require('bson');
 
 async function criar(req,res) {
     const contato = new Contato(req.body);
-    await contato.save();
+    await contato.save().catch(error => {
+        return res.status(422).json(error.erros['nome'].message);
+    });
     return res.status(201).json(contato);
 }
 

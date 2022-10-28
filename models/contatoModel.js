@@ -1,8 +1,11 @@
 const mongoose = require('mongoose');
 
 const contatoSchema = new mongoose.Schema({
-    nome: String,
-    fone: String,
+    nome: {
+        type: String,
+        requires:[true,'Nome é obrigatório']
+    },
+    fone: String
 },{
     timestamps: true,
 });
