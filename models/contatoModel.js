@@ -3,9 +3,12 @@ const mongoose = require('mongoose');
 const contatoSchema = new mongoose.Schema({
     nome: {
         type: String,
-        requires:[true,'Nome é obrigatório']
+        required:[true,'Nome é obrigatório']
     },
-    fone: String
+    fone: {
+        type: String,
+        required:[true,'fone é obrigatório']
+    },
 },{
     timestamps: true,
 });
