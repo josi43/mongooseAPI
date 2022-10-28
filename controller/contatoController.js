@@ -20,12 +20,12 @@ async function consultarPeloId(req,res) {
 
 async function atualizar(req,res) {
     await Contato.updateOne({_id: ObjectId(req.params.id)}, req.body);
-    return res.status(204);
+    return res.status(204).end();
 }
 
 async function remover(req,res){
     await Contato.deleteOne({_id: ObjectId(req.params.id)});
-    return res.status(204);
+    return res.status(204).end();
 }
 
 module.exports = {criar, listar, consultarPeloId, atualizar, remover};
