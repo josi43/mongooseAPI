@@ -8,10 +8,11 @@ async function criar(req,res) {
         if(error.errors['nome'])erros.push(error.errors['nome'].message);
         if(error.errors['fone'])erros.push(error.errors['fone'].message);
     });
-    if (erros) {
+    if (erros.length>0) {
         return res.status(422).json(erros);
+    }else{
+        return res.status(201).json(contato);
     }
-    return res.status(201).json(contato);
 }
 
 async function listar(req,res) {

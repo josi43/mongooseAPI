@@ -6,7 +6,7 @@
   "scripts": {
     "start": "nodemon app.js",
     "dev": "node app.js",
-    "test":"echo\"error: no test expecified\" && exit 1"
+    "test": "echo\"error: no test especified\" && exit 1"
   },
   "keywords": [],
   "author": "",
