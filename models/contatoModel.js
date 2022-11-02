@@ -3,7 +3,9 @@ const mongoose = require('mongoose');
 const contatoSchema = new mongoose.Schema({
     nome: {
         type: String,
-        required:[true,'Nome é obrigatório']
+        required:[true,'Nome é obrigatório'],
+        trim : true,
+        minLneght: [3,'nome desve conter pelo menos 3 caracteres']
     },
     fone: {
         type: String,

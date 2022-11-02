@@ -1,38 +1,60 @@
+const { ObjectID } = require('bson');
+const { PromiseProvider } = require('mongoose');
 const Contato = require('../models/contatoModel');
-const {ObjectId} =require('bson');
 
-async function criar(req,res) {
-    const contato = new Contato(req.body);
-    const erros =[];
-    await contato.save().catch(error => {
-        if(error.errors['nome'])erros.push(error.errors['nome'].message);
-        if(error.errors['fone'])erros.push(error.errors['fone'].message);
+async function criar (req, res){
+    const contato =  new Contato(req.body);
+    await contato.save()
+    .then (doc => {
+        return res.status(201).json(doc);
+    })
+    .catch(error => {
+        const msgErro = {};
+        Object.values(error.errors).forEach(({properties}) => {
+            msgErro[properties.path] = properties.message;
+        });
+        return res.status(422).json(msgErro);
+})
+}
+
+async function listar (req, res) {
+    await Contato.find({})
+    .then(contatos => {return res.json(contatos); })
+    .catch (error => {return res.status(500).json (error)});
+}
+
+async function consultarPeloId(req, res) {
+    await Contato.findOne({_id: ObjectID(req.params.id)})
+    .then(contato => {
+        if(contato) return res.json(contato);
+        else return res.status(404).json('Contato Não Localizado');
+    })
+    .catch(error => {return res.status(500).json(error) });
+}
+
+async function atualizar (req, res){
+    await Contato.findOneAndUpdate({_id: ObjectID(req.params.id)}, req.body, {
+        runValidators: true})
+    .then(contato => {
+        if(contato) return res.status(204).end();
+        else return res.status(404).json('Contato Nao Localizado');
+    })
+    .catch(error => {
+        const msgErro = {};
+        Object.values(error.errors).forEach(({properties}) => {
+            msgErro[properties.path] = properties.message;
+        });
+        return res.status(422).json(msgErro)
     });
-    if (erros) {
-        return res.status(422).json(erros);
-    }
-    return res.status(201).json(contato);
 }
 
-async function listar(req,res) {
-    const contatos = await Contato.find({}).then(lista => {return lista});
-    return res.json(contatos);
-}
-
-async function consultarPeloId(req,res) {
-    const contato = await Contato.findOne({_id: ObjectId(req.params.id)})
-                        .then(localizado=>{return localizado});
-    return res.json(contato);
-}
-
-async function atualizar(req,res) {
-    await Contato.updateOne({_id: ObjectId(req.params.id)}, req.body);
-    return res.status(204).end();
-}
-
-async function remover(req,res){
-    await Contato.deleteOne({_id: ObjectId(req.params.id)});
-    return res.status(204).end();
+async function remover (req, res){
+    await Contato.findOneAndDelete({_id: ObjectID(req.params.id) })
+    .then(contato => {
+        if(contato) return res.status(204).end();
+        else return res.status(404).json('Contato Não localizado'); 
+    })
+    .catch (error => {return res.status(500).json (error) });
 }
 
 module.exports = {criar, listar, consultarPeloId, atualizar, remover};
