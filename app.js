@@ -1,7 +1,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const contatoRouter = require('./router/contatoRouter')
-const url='mongodb+srv://iesb:3ABj1Q0Fe6RTWRA0@cluster0.ux0hiy5.mongodb.net/contatosdb?retryWrites=true&w=majority';
+const url='mongodb+srv://mateus:josisoneca@cluster0.6efu8an.mongodb.net/test';
 const app = express();
 const port = 3000;
 
